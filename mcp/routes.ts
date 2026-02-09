@@ -4,7 +4,7 @@ import { z } from "zod";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { isInitializeRequest } from "@modelcontextprotocol/sdk/types.js";
-import { addGraffiti, saveImageBlob } from "../lib/graffiti.ts";
+import { addGraffiti, generateWallSnapshot, saveImageBlob } from "../lib/graffiti.ts";
 
 const percent = z.number().min(0).max(100);
 const rotation = z.number().min(-360).max(360).default(0);
@@ -69,7 +69,7 @@ function createMcpServer(): McpServer {
     version: "0.1.0"
   }, {
     instructions:
-      "Lefty's bathroom graffiti MCP server. Use spray_text to add styled text tags and spray_image to place image stickers on the shared wall. Coordinates and dimensions MUST be percentages from 0 to 100, where 45 means 45 percent (not 0.45)."
+      "Lefty's bathroom graffiti MCP server. Use spray_text to add styled text tags, spray_image to place image stickers, and snapshot_wall to render the current wall as a PNG image URL. Coordinates and dimensions MUST be percentages from 0 to 100, where 45 means 45 percent (not 0.45)."
   });
 
   mcpServer.tool(
@@ -143,6 +143,26 @@ function createMcpServer(): McpServer {
         }
       ]
     };
+    }
+  );
+
+  mcpServer.tool(
+    "snapshot_wall",
+    "Render the current bathroom wall into a PNG snapshot and return a public image URL. Reuses a cached image keyed by the latest graffiti createdAt timestamp when available.",
+    async () => {
+      const snapshot = await generateWallSnapshot();
+      const cacheNote = snapshot.fromCache ? "; cache hit" : `; cache key ${snapshot.snapshotKey}`;
+      const skippedNote =
+        snapshot.skippedImages > 0 ? `; skipped ${snapshot.skippedImages} missing image(s)` : "";
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: `snapshot_wall created ${snapshot.imageUrl} (${snapshot.width}x${snapshot.height}; ${snapshot.itemCount} item(s)${cacheNote}${skippedNote})`
+          }
+        ]
+      };
     }
   );
 

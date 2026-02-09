@@ -44,6 +44,7 @@ The MCP server exposes:
 
 - `spray_image(image_url | image_blob, position, dimensions, rotation, opacity)`
 - `spray_text(text, font, color, position, size, rotation, opacity)`
+- `snapshot_wall()`
 
 Positions/dimensions are percentages in `[0, 100]`.
 
@@ -66,5 +67,13 @@ Spray by local image file (client converts to base64 blob):
 ```bash
 npm run mcp:client -- spray_image '{"image_blob_file":"./sample.png","position":{"x":50,"y":50},"dimensions":{"width":20,"height":20},"rotation":0,"opacity":1}'
 ```
+
+Render a snapshot of the current wall:
+
+```bash
+npm run mcp:client -- snapshot_wall
+```
+
+`snapshot_wall` reuses a cached snapshot keyed by the latest graffiti `createdAt` timestamp, and only re-renders when the wall changes.
 
 Graffiti data persists in `data/graffiti.json`.
