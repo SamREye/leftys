@@ -49,9 +49,16 @@ function createMcpServer(): McpServer {
   const mcpServer = new McpServer({
     name: "leftys-graffiti-wall",
     version: "0.1.0"
+  }, {
+    instructions:
+      "Lefty's bathroom graffiti MCP server. Use spray_text to add styled text tags and spray_image to place image stickers on the shared wall. Coordinates and dimensions are percentages between 0 and 100."
   });
 
-  mcpServer.tool("spray_text", sprayTextSchema, async (args) => {
+  mcpServer.tool(
+    "spray_text",
+    "Add a text tag to the graffiti wall with font/color/size, position, rotation, and opacity.",
+    sprayTextSchema,
+    async (args) => {
     const item = await addGraffiti({
       type: "text",
       text: args.text,
@@ -66,9 +73,14 @@ function createMcpServer(): McpServer {
     return {
       content: [{ type: "text", text: `spray_text created ${item.id}` }]
     };
-  });
+    }
+  );
 
-  mcpServer.tool("spray_image", sprayImageSchema, async (args) => {
+  mcpServer.tool(
+    "spray_image",
+    "Add an image sticker to the graffiti wall using image_url or image_blob plus position, size, rotation, and opacity.",
+    sprayImageSchema,
+    async (args) => {
     sprayImageInput.parse(args);
 
     const imageUrl = args.image_url ?? (await saveImageBlob(args.image_blob!));
@@ -85,7 +97,8 @@ function createMcpServer(): McpServer {
     return {
       content: [{ type: "text", text: `spray_image created ${item.id}` }]
     };
-  });
+    }
+  );
 
   return mcpServer;
 }
