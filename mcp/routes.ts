@@ -45,57 +45,103 @@ const sprayImageInput = z
     message: "Provide image_url or image_blob"
   });
 
+function normalizePercentPair(
+  first: number,
+  second: number
+): { first: number; second: number; normalized: boolean } {
+  const fractionRange = (value: number) => value >= 0 && value < 1;
+  const shouldNormalize = fractionRange(first) && fractionRange(second);
+
+  if (!shouldNormalize) {
+    return { first, second, normalized: false };
+  }
+
+  return {
+    first: first * 100,
+    second: second * 100,
+    normalized: true
+  };
+}
+
 function createMcpServer(): McpServer {
   const mcpServer = new McpServer({
     name: "leftys-graffiti-wall",
     version: "0.1.0"
   }, {
     instructions:
-      "Lefty's bathroom graffiti MCP server. Use spray_text to add styled text tags and spray_image to place image stickers on the shared wall. Coordinates and dimensions are percentages between 0 and 100."
+      "Lefty's bathroom graffiti MCP server. Use spray_text to add styled text tags and spray_image to place image stickers on the shared wall. Coordinates and dimensions MUST be percentages from 0 to 100, where 45 means 45 percent (not 0.45)."
   });
 
   mcpServer.tool(
     "spray_text",
-    "Add a text tag to the graffiti wall with font/color/size, position, rotation, and opacity.",
+    "Add a text tag to the graffiti wall with font/color/size, position, rotation, and opacity. position.x and position.y must be 0-100 percentages (example: 45 means 45%).",
     sprayTextSchema,
     async (args) => {
+    const normalizedPosition = normalizePercentPair(args.position.x, args.position.y);
+
     const item = await addGraffiti({
       type: "text",
       text: args.text,
       font: args.font,
       color: args.color,
-      position: args.position,
+      position: {
+        x: normalizedPosition.first,
+        y: normalizedPosition.second
+      },
       size: args.size,
       rotation: args.rotation,
       opacity: args.opacity
     });
 
     return {
-      content: [{ type: "text", text: `spray_text created ${item.id}` }]
+      content: [
+        {
+          type: "text",
+          text: normalizedPosition.normalized
+            ? `spray_text created ${item.id} (normalized 0-1 position fractions to 0-100 percentages)`
+            : `spray_text created ${item.id}`
+        }
+      ]
     };
     }
   );
 
   mcpServer.tool(
     "spray_image",
-    "Add an image sticker to the graffiti wall using image_url or image_blob plus position, size, rotation, and opacity.",
+    "Add an image sticker to the graffiti wall using image_url or image_blob plus position, size, rotation, and opacity. position/dimensions values must be 0-100 percentages (example: 20 means 20%).",
     sprayImageSchema,
     async (args) => {
     sprayImageInput.parse(args);
+    const normalizedPosition = normalizePercentPair(args.position.x, args.position.y);
+    const normalizedDimensions = normalizePercentPair(args.dimensions.width, args.dimensions.height);
 
     const imageUrl = args.image_url ?? (await saveImageBlob(args.image_blob!));
 
     const item = await addGraffiti({
       type: "image",
       imageUrl,
-      position: args.position,
-      dimensions: args.dimensions,
+      position: {
+        x: normalizedPosition.first,
+        y: normalizedPosition.second
+      },
+      dimensions: {
+        width: normalizedDimensions.first,
+        height: normalizedDimensions.second
+      },
       rotation: args.rotation,
       opacity: args.opacity
     });
 
     return {
-      content: [{ type: "text", text: `spray_image created ${item.id}` }]
+      content: [
+        {
+          type: "text",
+          text:
+            normalizedPosition.normalized || normalizedDimensions.normalized
+              ? `spray_image created ${item.id} (normalized 0-1 fractions to 0-100 percentages)`
+              : `spray_image created ${item.id}`
+        }
+      ]
     };
     }
   );
