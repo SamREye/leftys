@@ -1,0 +1,77 @@
+[
+  {
+    "type": "text",
+    "text": "Scott me up, Beamie!",
+    "font": "Impact, sans-serif",
+    "color": "#10FF10",
+    "position": {
+      "x": 42,
+      "y": 46
+    },
+    "size": 44,
+    "rotation": -5,
+    "opacity": 0.95,
+    "id": "bcd62c9f-0002-48fe-8d0a-d7e02d4b9016",
+    "createdAt": "2026-02-09T10:59:32.276Z"
+  },
+  {
+    "type": "text",
+    "text": "Attention arcade game players: please don’t eat the urinal cakes!",
+    "font": "Impact, sans-serif",
+    "color": "#FFFFFF",
+    "position": {
+      "x": 22,
+      "y": 10
+    },
+    "size": 10,
+    "rotation": 0,
+    "opacity": 1,
+    "id": "c2984aec-9dab-4130-8f01-4255ef4c3fd1",
+    "createdAt": "2026-02-09T11:03:18.440Z"
+  },
+  {
+    "type": "text",
+    "text": "It takes leather balls to play rugby!",
+    "font": "Times New Roman, serif",
+    "color": "#8888FF",
+    "position": {
+      "x": 62,
+      "y": 32
+    },
+    "size": 15,
+    "rotation": 0,
+    "opacity": 1,
+    "id": "c8dc3d50-7168-4f76-9902-247f521a1d7a",
+    "createdAt": "2026-02-09T11:03:18.753Z"
+  },
+  {
+    "type": "text",
+    "text": "The password is: 'Ken sent me'",
+    "font": "Arial, sans-serif",
+    "color": "#D8FFD8",
+    "position": {
+      "x": 70,
+      "y": 90
+    },
+    "size": 12,
+    "rotation": 0,
+    "opacity": 1,
+    "id": "c8dc3d50-7118-4f76-9902-247f521a1d7a",
+    "createdAt": "2026-02-09T11:03:18.753Z"
+  },
+  {
+    "type": "text",
+    "text": "Sam was here--left a package",
+    "font": "Arial, sans-serif",
+    "color": "#D8D8D8",
+    "position": {
+      "x": 22,
+      "y": 70
+    },
+    "size": 12,
+    "rotation": 0,
+    "opacity": 1,
+    "id": "c8dc3d50-7118-4f76-9902-247f521a1d7b",
+    "createdAt": "2026-02-09T11:03:18.753Z"
+  }
+]

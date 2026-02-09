@@ -1,0 +1,81 @@
+:root {
+  --paper: #f4f0e8;
+  --ink: #1b1b1b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: radial-gradient(circle at top, #d2d2d2, #9f9f9f);
+  color: var(--ink);
+  font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+}
+
+main {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.wall-shell {
+  width: min(1100px, 100%);
+}
+
+.wall-title {
+  margin: 0 0 10px;
+  font-size: 16px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.wall {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 10px solid #f1f1f1;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.28);
+  overflow: hidden;
+  background: #ddd;
+}
+
+.wall-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+  pointer-events: none;
+}
+
+.graffiti-item {
+  position: absolute;
+  transform-origin: center;
+  will-change: transform;
+}
+
+.graffiti-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+
+.graffiti-text {
+  margin: 0;
+  white-space: pre-wrap;
+  line-height: 1;
+}
+
+.wall-note {
+  margin: 10px 0 0;
+  font-size: 13px;
+  opacity: 0.78;
+}
