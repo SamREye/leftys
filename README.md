@@ -13,7 +13,7 @@ npm install
 2. Background image:
 
 ```text
-/public/Leftys-bg.png
+/public/leftys-bg.png
 ```
 
 3. Start the wall UI:
@@ -27,6 +27,16 @@ npm run dev
 ```bash
 npm run mcp:server
 ```
+
+## Production (single service)
+
+`npm run start` now serves both:
+
+- Web UI at `/`
+- MCP endpoint at `/mcp`
+- Health endpoint at `/health`
+
+This is the recommended command for Railway so the same domain exposes both the page and MCP server.
 
 ## MCP tools
 

@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "NODE_ENV=production node --experimental-strip-types server.ts",
     "mcp:server": "node --experimental-strip-types mcp/server.ts",
     "mcp:client": "node --experimental-strip-types mcp/client.ts"
   },
